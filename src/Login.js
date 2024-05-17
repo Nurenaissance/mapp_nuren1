@@ -29,7 +29,7 @@ export const Login = () => {
       })
       .then(data => {
         alert('Login successful');
-        navigation.navigate('Dashboard');
+        navigation.navigate('MainTabs');
         // Redirect or navigate to the home screen
       })
       .catch(error => {

@@ -4,43 +4,48 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 
-const ContactCard = ({ name, codyName, phone, iconColor, icon }) => (
-  <View style={styles.contactCard}>
+const AccountCard = ({ company, phone, industry, ownerName, email, iconColor, icon }) => (
+  <View style={styles.accountCard}>
     <MaterialIcons name={icon} size={48} color={iconColor} style={styles.icon} />
-    <Text style={styles.contactName}>{name}</Text>
+    <Text style={styles.accountCompany}>{company}</Text>
     {phone ? <Text style={styles.phone}>{phone}</Text> : null}
+    {industry ? <Text style={styles.industry}>{industry}</Text> : null}
+    {ownerName ? <Text style={styles.ownerName}>{ownerName}</Text> : null}
+    {email ? <Text style={styles.email}>{email}</Text> : null}
   </View>
 );
 
-const Contact = () => {
-  const [contacts, setContacts] = useState([]);
+const Account = () => {
+  const [accounts, setAccounts] = useState([]);
 
   useEffect(() => {
     axios
-      .get('https://backendcrmnurenai.azurewebsites.net/contacts/', {
+      .get('https://backendcrmnurenai.azurewebsites.net/accounts/', {
         headers: {
           'Content-Type': 'application/json',
         },
       })
       .then((response) => {
-        setContacts(response.data);
+        setAccounts(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching contact data:', error);
+        console.error('Error fetching account data:', error);
       });
   }, []);
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.cardsContainer}>
-        {contacts.map((contact, index) => (
-          <ContactCard
+        {accounts.map((account, index) => (
+          <AccountCard
             key={index}
-            name={contact.Name}
-            codyName={contact.company}
-            phone={contact.phone}
+            company={account.company}
+            phone={account.phone}
+            industry={account.industry}
+            ownerName={account.Name}
+            email={account.email}
             iconColor={getRandomColor()}
-            icon="person"
+            icon="business"
           />
         ))}
       </ScrollView>
@@ -75,7 +80,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
-  contactCard: {
+  accountCard: {
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 8,
@@ -88,7 +93,7 @@ const styles = StyleSheet.create({
   icon: {
     marginBottom: 8,
   },
-  contactName: {
+  accountCompany: {
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -98,6 +103,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 4,
   },
+  industry: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 4,
+  },
+  ownerName: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 4,
+  },
+  email: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 4,
+  },
 });
 
-export default Contact;
+export default Account;
